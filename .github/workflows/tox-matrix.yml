@@ -22,8 +22,12 @@ jobs:
 
         tox-env: [alldeps-cov]
     env:
-      TOXENV: py${{ matrix.python-version }}-test-${{ matrix.tox-env }}
+      TOXENV: ${{ steps.pyver.outputs.pyver }}-test-${{ matrix.tox-env }}
     steps:
+    - name: Define Python version
+      id: pyver
+      run: |
+        pyver=$(echo {{ matrix.python-version }} | tr -d '.')
     - name: Check out repository
       uses: actions/checkout@v2
     - name: Set up Python
