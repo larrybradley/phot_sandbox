@@ -30,5 +30,6 @@ jobs:
         python -m pip install tox
     - name: ${{ env.TOXENV }} (${{ matrix.os }})
       run: |
-        python -c "import sys; print(sys.version)"
+        python -c "import sys; print(f'Python {sys.version}')"
+        python -c "import pip; print(f'pip {pip.__version__}')"
         tox -e $TOXENV
