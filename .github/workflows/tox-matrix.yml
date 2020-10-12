@@ -2,8 +2,7 @@
 #
 # The tests are run with tox and the test environments configured by
 # tox.ini.
-
-name: Python Tests
+name: Tox matrix
 
 on: [push, pull_request]
 
