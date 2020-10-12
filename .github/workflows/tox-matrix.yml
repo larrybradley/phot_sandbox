@@ -28,6 +28,7 @@ jobs:
       id: pyver
       run: |
         pyver=$(echo {{ matrix.python-version }} | tr -d '.')
+        echo "::set-output name=id::$pyver"
     - name: Check out repository
       uses: actions/checkout@v2
     - name: Set up Python
