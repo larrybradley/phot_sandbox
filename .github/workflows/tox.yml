@@ -71,7 +71,7 @@ jobs:
     - name: ${{ steps.toxenv.outputs.toxenv }} (${{ matrix.os }})
       run: |
         # echo ${{ matrix.tox-env }}
-        run -e ${{ matrix.tox-env }}
+        tox -e ${{ matrix.tox-env }}
 
   py38_matrix:
     runs-on: ${{ matrix.os }}
@@ -107,10 +107,10 @@ jobs:
         python -c "import pip; print(f'pip {pip.__version__}')"
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
-    - name: ${{ env.TOXENV }} (${{ matrix.os }})
+    - name: ${{ matrix.env.TOXENV }} (${{ matrix.os }})
       run: |
-        #echo ${{ env.TOXENV }}
-        tox -e ${{ env.TOXENV }}
+        #echo ${{ matrix.env.TOXENV }}
+        tox -e ${{ matrix.env.TOXENV }}
 
   astropy_lts:
     runs-on: ${{ matrix.os }}
@@ -143,7 +143,7 @@ jobs:
         python -c "import pip; print(f'pip {pip.__version__}')"
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
-    - name: ${{ env.TOXENV }} (${{ matrix.os }})
+    - name: ${{ matrix.env.TOXENV }} (${{ matrix.os }})
       run: |
-        #echo ${{ env.TOXENV }}
-        tox -e ${{ env.TOXENV }}
+        #echo ${{ matrix.env.TOXENV }}
+        tox -e ${{ matrix.env.TOXENV }}
