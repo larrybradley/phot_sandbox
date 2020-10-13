@@ -1,0 +1,13 @@
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: run composite tox
+    steps:
+    - uses: actions/checkout@v2
+    - id: foo
+      uses: ./.github/actions
+      with:
+        python-version: 3.6
+        tox-env: codestyle
