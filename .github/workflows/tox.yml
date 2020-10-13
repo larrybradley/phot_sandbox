@@ -11,6 +11,7 @@ on: [push, pull_request]
 jobs:
 
   main_matrix:
+    name: ${{ steps.toxenv.outputs.toxenv }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     strategy:
@@ -37,16 +38,22 @@ jobs:
         #env:
         #TOXENV: ${{ steps.pyver.outputs.pyver }}-test-${{ matrix.tox-env }}
     steps:
+
     - name: Define tox environment name
       id: toxenv
-      run: |
-        ##$pyver=$(python -c "a='${{ matrix.python-version }}'; a=a.replace('.', ''); print(a)")
-        #pyver=$(python -c "print('${{ matrix.python-version }}'.replace('.', ''))")
-        ##$pyver = "${{ matrix.python-version }}" -replace '.', ''
-        ##$pyver = "${{ matrix.python-version }}".replace('.', '')
-        #toxenv="py$pyver-${{ matrix.tox-env }}"
-        #echo "::set-output name=toxenv::$toxenv"
-        echo ::set-output name=toxenv::$(python -c "print('py'+'${{ matrix.python-version }}'.replace('.', '') + '${{ matrix.tox-env }}')")
+      shell: bash
+      run: echo ::set-output name=toxenv::$(python -c "print('py'+'${{ matrix.python-version }}'.replace('.', '') + '${{ matrix.tox-env }}')")
+
+    #- name: Define tox environment name
+    #  id: toxenv
+    #  run: |
+    #    ##$pyver=$(python -c "a='${{ matrix.python-version }}'; a=a.replace('.', ''); print(a)")
+    #    #pyver=$(python -c "print('${{ matrix.python-version }}'.replace('.', ''))")
+    #    ##$pyver = "${{ matrix.python-version }}" -replace '.', ''
+    #    ##$pyver = "${{ matrix.python-version }}".replace('.', '')
+    #    #toxenv="py$pyver-${{ matrix.tox-env }}"
+    #    #echo "::set-output name=toxenv::$toxenv"
+    #    echo ::set-output name=toxenv::$(python -c "print('py'+'${{ matrix.python-version }}'.replace('.', '') + '${{ matrix.tox-env }}')")
 
     - name: Check out repository
       uses: actions/checkout@v2
