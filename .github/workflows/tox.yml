@@ -37,13 +37,7 @@ jobs:
         #env:
         #TOXENV: ${{ steps.pyver.outputs.pyver }}-test-${{ matrix.tox-env }}
     steps:
-      id: toxenvorig
-      run: |
-        pyver=$(echo ${{ matrix.python-version }} | tr -d '.')
-        toxenv=py$pyver-${{ matrix.tox-env }}
-        echo "::set-output name=toxenv::$toxenv"
-    - if: matrix.os == 'windows-latest'
-      name: Define tox environment name
+    - name: Define tox environment name
       id: toxenv
       run: |
         $pyver=$(python -c "a=${{ matrix.python-version }}; a=a.replace('.', ''); print(a)")
