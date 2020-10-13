@@ -37,8 +37,6 @@ jobs:
         #env:
         #TOXENV: ${{ steps.pyver.outputs.pyver }}-test-${{ matrix.tox-env }}
     steps:
-    - if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
-      name: Define tox environment name
       id: toxenvorig
       run: |
         pyver=$(echo ${{ matrix.python-version }} | tr -d '.')
@@ -48,8 +46,9 @@ jobs:
       name: Define tox environment name
       id: toxenv
       run: |
+        $pyver=$(python -c "a=${{ matrix.python-version }}; a=a.replace('.', ''); print(a)")
         #$pyver = "${{ matrix.python-version }}" -replace '.', ''
-        $pyver = "${{ matrix.python-version }}".replace('.', '')
+        #$pyver = "${{ matrix.python-version }}".replace('.', '')
         $toxenv="py$pyver-${{ matrix.tox-env }}"
         echo "::set-output name=toxenv::$toxenv"
     - name: Check out repository
@@ -70,8 +69,8 @@ jobs:
         python -c "import tox; print(f'tox {tox.__version__}')"
     - name: ${{ steps.toxenv.outputs.toxenv }} (${{ matrix.os }})
       run: |
-        # echo ${{ matrix.tox-env }}
-        tox -e ${{ matrix.tox-env }}
+        echo ${{ matrix.tox-env }}
+        #tox -e ${{ matrix.tox-env }}
 
   py38_matrix:
     runs-on: ${{ matrix.os }}
@@ -81,6 +80,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: [3.8]
         env:
+          - TOXENV: test
           - TOXENV: test-alldeps-devdeps
           - TOXENV: codestyle
           - TOXENV: build_docs
@@ -110,8 +110,8 @@ jobs:
         python -c "import tox; print(f'tox {tox.__version__}')"
     - name: ${{ matrix.env.TOXENV }} (${{ matrix.os }})
       run: |
-        #echo ${{ matrix.env.TOXENV }}
-        tox -e ${{ matrix.env.TOXENV }}
+        echo ${{ matrix.env.TOXENV }}
+        #tox -e ${{ matrix.env.TOXENV }}
 
   astropy_lts:
     runs-on: ${{ matrix.os }}
@@ -146,5 +146,5 @@ jobs:
         python -c "import tox; print(f'tox {tox.__version__}')"
     - name: ${{ matrix.env.TOXENV }} (${{ matrix.os }})
       run: |
-        #echo ${{ matrix.env.TOXENV }}
-        tox -e ${{ matrix.env.TOXENV }}
+        echo ${{ matrix.env.TOXENV }}
+        #tox -e ${{ matrix.env.TOXENV }}
