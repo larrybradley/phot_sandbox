@@ -44,7 +44,7 @@ jobs:
         pyver=$(python -c "print('${{ matrix.python-version }}'.replace('.', ''))")
         #$pyver = "${{ matrix.python-version }}" -replace '.', ''
         #$pyver = "${{ matrix.python-version }}".replace('.', '')
-        $toxenv="py$pyver-${{ matrix.tox-env }}"
+        toxenv="py$pyver-${{ matrix.tox-env }}"
         echo "::set-output name=toxenv::$toxenv"
     - name: Check out repository
       uses: actions/checkout@v2
