@@ -46,7 +46,8 @@ jobs:
       name: Define tox environment name
       id: toxenv
       run: |
-        $pyver = ${{ matrix.python-version }} -replace '.', ''
+        #$pyver = "${{ matrix.python-version }}" -replace '.', ''
+        $pyver = ${{ matrix.python-version }}.replace('.', '')
         $toxenv="py$pyver-${{ matrix.tox-env }}"
         echo "::set-output name=toxenv::$toxenv"
     - name: Check out repository
