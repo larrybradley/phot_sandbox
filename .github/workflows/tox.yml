@@ -1,3 +1,7 @@
+# need to add i386 job
+
+# GitHub Actions workflow for testing and continuous integration.
+#
 # The tests are run with tox and the test environments configured by
 # tox.ini.
 name: Tox matrix
@@ -27,15 +31,16 @@ jobs:
           - os: windows-latest
             python-version: 3.9
 
-        tox-env: [alldeps-cov]
+        tox-env: ['alldeps-cov']
         #env:
         #TOXENV: ${{ steps.pyver.outputs.pyver }}-test-${{ matrix.tox-env }}
     steps:
-      #- name: Define Python version
-      #  id: pyver
-      # run: |
-      #   pyver=$(echo {{ matrix.python-version }} | tr -d '.')
-      #   echo "::set-output name=id::$pyver"
+    - name: Define tox environment name
+      id: toxenv
+      run: |
+        pyver=$(echo ${{ matrix.python-version }} | tr -d '.')
+        toxenv=py$pyver-${{ matrix.tox-env }}
+        echo "::set-output name=toxenv::$toxenv"
     - name: Check out repository
       uses: actions/checkout@v2
     - name: Set up Python
@@ -52,7 +57,7 @@ jobs:
         python -c "import pip; print(f'pip {pip.__version__}')"
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
-    - name: ${{ env.TOXENV }} (${{ matrix.os }})
+    - name: ${{ steps.toxenv.outputs.toxenv }} (${{ matrix.os }})
       run: echo ${{ matrix.tox-env }}
 
   py38_matrix:
