@@ -21,14 +21,14 @@ jobs:
             python-version: [3.6, 3.7, 3.9]
 
         tox-env: [alldeps-cov]
-    env:
-      TOXENV: ${{ steps.pyver.outputs.pyver }}-test-${{ matrix.tox-env }}
+        #env:
+        #TOXENV: ${{ steps.pyver.outputs.pyver }}-test-${{ matrix.tox-env }}
     steps:
-    - name: Define Python version
-      id: pyver
-      run: |
-        pyver=$(echo {{ matrix.python-version }} | tr -d '.')
-        echo "::set-output name=id::$pyver"
+      #- name: Define Python version
+      #  id: pyver
+      # run: |
+      #   pyver=$(echo {{ matrix.python-version }} | tr -d '.')
+      #   echo "::set-output name=id::$pyver"
     - name: Check out repository
       uses: actions/checkout@v2
     - name: Set up Python
@@ -46,4 +46,4 @@ jobs:
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
     - name: ${{ env.TOXENV }} (${{ matrix.os }})
-      run: tox -e $TOXENV
+      run: echo $TOXENV
