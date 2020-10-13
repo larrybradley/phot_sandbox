@@ -31,6 +31,8 @@ jobs:
           - os: windows-latest
             python-version: 3.9
 
+            #env:
+            #- TOXENV: alldeps-cov
         tox-env: ['alldeps-cov']
         #env:
         #TOXENV: ${{ steps.pyver.outputs.pyver }}-test-${{ matrix.tox-env }}
@@ -67,7 +69,9 @@ jobs:
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
     - name: ${{ steps.toxenv.outputs.toxenv }} (${{ matrix.os }})
-      run: echo ${{ matrix.tox-env }}
+      run: |
+        # echo ${{ matrix.tox-env }}
+        run -e ${{ matrix.tox-env }}
 
   py38_matrix:
     runs-on: ${{ matrix.os }}
@@ -104,8 +108,9 @@ jobs:
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
     - name: ${{ env.TOXENV }} (${{ matrix.os }})
-      run: echo ${{ env.TOXENV }}
-
+      run: |
+        #echo ${{ env.TOXENV }}
+        tox -e ${{ env.TOXENV }}
 
   astropy_lts:
     runs-on: ${{ matrix.os }}
@@ -115,10 +120,7 @@ jobs:
         os: [ubuntu-latest]
         python-version: [3.6]
         env:
-          - TOXENV: test-alldeps-devdeps
-          - TOXENV: codestyle
-          - TOXENV: build_docs
-          - TOXENV: linkcheck
+          - TOXENV: test-alldeps-astropylts-numpy117
     steps:
       #- name: Define Python version
       #  id: pyver
@@ -142,4 +144,6 @@ jobs:
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
     - name: ${{ env.TOXENV }} (${{ matrix.os }})
-      run: echo ${{ env.TOXENV }}
+      run: |
+        #echo ${{ env.TOXENV }}
+        tox -e ${{ env.TOXENV }}
