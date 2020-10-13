@@ -35,11 +35,19 @@ jobs:
         #env:
         #TOXENV: ${{ steps.pyver.outputs.pyver }}-test-${{ matrix.tox-env }}
     steps:
-    - name: Define tox environment name
-      id: toxenv
+    - if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+      name: Define tox environment name
+      id: toxenvorig
       run: |
         pyver=$(echo ${{ matrix.python-version }} | tr -d '.')
         toxenv=py$pyver-${{ matrix.tox-env }}
+        echo "::set-output name=toxenv::$toxenv"
+    - if: matrix.os == 'windows-latest'
+      name: Define tox environment name
+      id: toxenv
+      run: |
+        $pyver = ${{ matrix.python-version }} -replace '.', ''
+        $toxenv="py$pyver-${{ matrix.tox-env }}"
         echo "::set-output name=toxenv::$toxenv"
     - name: Check out repository
       uses: actions/checkout@v2
