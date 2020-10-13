@@ -11,7 +11,7 @@ on: [push, pull_request]
 jobs:
 
   main_matrix:
-    name: ${{ env.toxenv }} (${{ matrix.os }})
+    name: ${{ matrix.os }}, ${{ matrix.python-version }}-${{ matrix.tox-env }}
     runs-on: ${{ matrix.os }}
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     strategy:
