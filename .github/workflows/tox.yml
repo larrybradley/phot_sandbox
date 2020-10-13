@@ -40,7 +40,8 @@ jobs:
     - name: Define tox environment name
       id: toxenv
       run: |
-        $pyver=$(python -c "a=${{ matrix.python-version }}; a=a.replace('.', ''); print(a)")
+        #$pyver=$(python -c "a='${{ matrix.python-version }}'; a=a.replace('.', ''); print(a)")
+        $pyver=$(python -c "print('${{ matrix.python-version }}'.replace('.', '')")
         #$pyver = "${{ matrix.python-version }}" -replace '.', ''
         #$pyver = "${{ matrix.python-version }}".replace('.', '')
         $toxenv="py$pyver-${{ matrix.tox-env }}"
