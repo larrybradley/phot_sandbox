@@ -1,10 +1,8 @@
-# need to add i386 job
-
 # GitHub Actions workflow for testing and continuous integration.
 #
-# The tests are run with tox and the test environments configured by
+# The tests are run with tox with the test environments configured by
 # tox.ini.
-name: Tox matrix
+name: Tests
 
 on: [push, pull_request]
 
@@ -72,11 +70,6 @@ jobs:
           - TOXENV: build_docs
           - TOXENV: linkcheck
     steps:
-      #- name: Define Python version
-      #  id: pyver
-      # run: |
-      #   pyver=$(echo {{ matrix.python-version }} | tr -d '.')
-      #   echo "::set-output name=id::$pyver"
     - name: Check out repository
       uses: actions/checkout@v2
     - name: Set up Python
@@ -87,6 +80,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install tox
+    - name: Install graphviz dependency
+      if: "contains(${{ matrix.env.TOXENV }}, 'build_docs')"
+      run: |
         sudo apt-get -y install graphviz
     - name: Print Python, pip, setuptools, and tox versions
       run: |
