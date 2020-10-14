@@ -13,7 +13,7 @@ jobs:
   main_matrix:
     name: ${{ matrix.os }}, ${{ matrix.python-version }}-${{ matrix.tox-env }}
     runs-on: ${{ matrix.os }}
-    if: "!contains(github.event.head_commit.message, '[skip ci]') || !contains(github.event.head_commit.message, '[ci skip]')"
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
