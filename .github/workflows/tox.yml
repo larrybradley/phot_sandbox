@@ -81,7 +81,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install tox
     - name: Install graphviz dependency
-      if: "contains(${{ matrix.env.TOXENV }}, 'build_docs')"
+      if: contains(matrix.env.TOXENV, 'build_docs')
       run: |
         sudo apt-get -y install graphviz
     - name: Print Python, pip, setuptools, and tox versions
