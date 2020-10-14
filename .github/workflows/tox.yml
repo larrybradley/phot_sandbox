@@ -42,7 +42,9 @@ jobs:
     - name: Define tox environment name
       id: toxenv
       shell: bash
-      run: echo ::set-env name=toxenv::$(python -c "print('py'+'${{ matrix.python-version }}'.replace('.', '') + '-${{ matrix.tox-env }}')")
+      #run: echo ::set-env name=toxenv::$(python -c "print('py'+'${{ matrix.python-version }}'.replace('.', '') + '-${{ matrix.tox-env }}')")
+      run: echo "toxenv=$(python -c \"print('py'+'${{ matrix.python-version }}'.replace('.', '') + '-${{ matrix.tox-env }}')\"" >> $GITHUB_ENV
+      )
 
     #- name: Define tox environment name
     #  id: toxenv
