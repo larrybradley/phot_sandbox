@@ -8,7 +8,8 @@ name: Cron Test
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    # run at 7:00 am UTC on Mon-Fri
+    - cron: '0 7 * * 1-5'
 
 jobs:
   cron-test:
