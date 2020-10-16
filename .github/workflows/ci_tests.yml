@@ -25,13 +25,13 @@ jobs:
           'macos-py38',
           'windows-py38',
           'ubuntu-py38-test',
-          'ubuntu-py38-test-alldeps-devdeps',
-          'ubuntu-py38-codestyle',
-          'ubuntu-py38-build_docs',
-          'ubuntu-py38-linkcheck',
-          'ubuntu-py38-bandit',
+          'ubuntu-codestyle',
+          'ubuntu-build_docs',
+          'ubuntu-linkcheck',
+          'ubuntu-bandit',
           'ubuntu-py36-test-alldeps-astropylts-numpy117',
           'ubuntu-py37-test-alldeps-astropylts-numpy118',
+          'ubuntu-py38-test-alldeps-devdeps',
         ]
 
         include:
@@ -60,26 +60,26 @@ jobs:
             os: ubuntu-latest
             python: '3.8'
             tox_env: 'py38-test'
+         - name: 'ubuntu-codestyle'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'codestyle'
+          - name: 'ubuntu-build_docs'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'build_docs'
+          - name: 'ubuntu-linkcheck'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'linkcheck'
+          - name: 'ubuntu-bandit'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'bandit'
           - name: 'ubuntu-py38-test-alldeps-devdeps'
             os: ubuntu-latest
             python: '3.8'
             tox_env: 'py38-test-test-alldeps-devdeps'
-          - name: 'ubuntu-py38-codestyle'
-            os: ubuntu-latest
-            python: '3.8'
-            tox_env: 'py38-codestyle'
-          - name: 'ubuntu-py38-build_docs'
-            os: ubuntu-latest
-            python: '3.8'
-            tox_env: 'py38-build_docs'
-          - name: 'ubuntu-py38-linkcheck'
-            os: ubuntu-latest
-            python: '3.8'
-            tox_env: 'py38-linkcheck'
-          - name: 'ubuntu-py38-bandit'
-            os: ubuntu-latest
-            python: '3.8'
-            tox_env: 'py38-bandit'
           - name: 'ubuntu-py36-test-alldeps-astropylts-numpy117'
             os: ubuntu-latest
             python: '3.6'
