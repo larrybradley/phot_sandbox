@@ -52,13 +52,13 @@ jobs:
         python -c "import tox; print(f'tox {tox.__version__}')"
 
     - name: Run tests
-      if: ! matrix.use_remote_data
+      if: "! matrix.use_remote_data"
       run: |
         #echo ${{ matrix.tox-env }}
         tox -e ${{ matrix.tox_env }}
 
     - name: Run tests with remote data
-      if: matrix.use_remote_data
+      if: "matrix.use_remote_data"
       env:
         TOXPOSARGS: '--remote-data=any'
       run: |
@@ -66,7 +66,7 @@ jobs:
         tox -e ${{ matrix.tox_env }}
 
     - name: Upload coverage to codecov
-      if: endsWith(matrix.tox_env, '-cov')
+      if: "endsWith(matrix.tox_env, '-cov')"
       uses: codecov/codecov-action@v1.0.13
       with:
         file: ./coverage.xml
