@@ -13,24 +13,24 @@ env:
 
 jobs:
   ci-tests:
-    #name: ${{ matrix.os }}, ${{ matrix.tox_env }}
+    name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     if: "!(contains(github.event.head_commit.message, '[skip ci]') || contains(github.event.head_commit.message, '[ci skip]'))"
     strategy:
       matrix:
         name: [
-          "ubuntu-py36",
-          "ubuntu-py37",
+          'ubuntu-py36',
+          'ubuntu-py37',
         ]
         include:
-          - name: "ubuntu-py36"
+          - name: 'ubuntu-py36'
             os: ubuntu-latest
-            python: "3.6"
-            tox_env: "py36-test-alldeps"
-          - name: "ubuntu-py37"
+            python: '3.6'
+            tox_env: 'py36-test-alldeps'
+          - name: 'ubuntu-py37'
             os: ubuntu-latest
-            python: "3.7"
-            tox_env: "py37-test-alldeps"
+            python: '3.7'
+            tox_env: 'py37-test-alldeps'
 
     steps:
     - name: Check out repository
