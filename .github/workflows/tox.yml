@@ -52,7 +52,7 @@ jobs:
         python -c "import tox; print(f'tox {tox.__version__}')"
 
     - name: Run tests
-      if: !matrix.use_remote_data
+      if: ! matrix.use_remote_data
       run: |
         #echo ${{ matrix.tox-env }}
         tox -e ${{ matrix.tox_env }}
