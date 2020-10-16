@@ -12,8 +12,7 @@ name: Tests
 on: [push, pull_request]
 
 env:
-  - SETUP_XVFB=True  # avoid issues if mpl tries to open a GUI window
-  - TOXARGS='-v'
+  TOXARGS='-v'
 
 jobs:
 
