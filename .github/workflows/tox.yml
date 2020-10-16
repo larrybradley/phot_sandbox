@@ -20,18 +20,74 @@ jobs:
       matrix:
         name: [
           'ubuntu-py36',
+          'ubuntu-py37',
+          'ubuntu-py38',
+          'macos-py38',
+          'windows-py38',
+          'ubuntu-py38-test',
           'ubuntu-py38-test-alldeps-devdeps',
+          'ubuntu-py38-codestyle',
+          'ubuntu-py38-buildocs',
+          'ubuntu-py38-linkcheck',
+          'ubuntu-py38-bandit',
+          'ubuntu-py36-test-alldeps-astropylts-numpy117',
+          'ubuntu-py37-test-alldeps-astropylts-numpy118',
         ]
+
         include:
           - name: 'ubuntu-py36'
             os: ubuntu-latest
             python: '3.6'
             tox_env: 'py36-test-alldeps'
-          - name: 'ubuntu-py38-test-alldeps-devdeps'
+          - name: 'ubuntu-py37'
+            os: ubuntu-latest
+            python: '3.7'
+            tox_env: 'py37-test-alldeps'
+          - name: 'ubuntu-py38'
             os: ubuntu-latest
             python: '3.8'
             tox_env: 'py38-test-alldeps-cov'
             use_remote_data: true
+          - name: 'macos-py38'
+            os: macos-latest
+            python: '3.8'
+            tox_env: 'py38-test-alldeps'
+          - name: 'windows-py38'
+            os: windows-latest
+            python: '3.8'
+            tox_env: 'py38-test-alldeps'
+          - name: 'ubuntu-py38-test'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'py38-test'
+          - name: 'ubuntu-py38-test-alldeps-devdeps'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'py38-test-test-alldeps-devdeps'
+          - name: 'ubuntu-py38-codestyle'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'py38-codestyle'
+          - name: 'ubuntu-py38-builddocs'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'py38-builddocs'
+          - name: 'ubuntu-py38-linkcheck'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'py38-linkcheck'
+          - name: 'ubuntu-py38-bandit'
+            os: ubuntu-latest
+            python: '3.8'
+            tox_env: 'py38-bandit'
+          - name: 'ubuntu-py36-test-alldeps-astropylts-numpy117'
+            os: ubuntu-latest
+            python: '3.6'
+            tox_env: 'py36-test-alldeps-astropylts-numpy117'
+          - name: 'ubuntu-py37-test-alldeps-astropylts-numpy118'
+            os: ubuntu-latest
+            python: '3.7'
+            tox_env: 'py37-test-alldeps-astropylts-numpy118'
 
     steps:
     - name: Check out repository
@@ -54,7 +110,6 @@ jobs:
     - name: Run tests
       if: "! matrix.use_remote_data"
       run: |
-        #echo ${{ matrix.tox-env }}
         tox -e ${{ matrix.tox_env }}
 
     - name: Run tests with remote data
@@ -62,7 +117,6 @@ jobs:
       env:
         TOXPOSARGS: '--remote-data=any'
       run: |
-        #echo ${{ matrix.tox-env }}
         tox -e ${{ matrix.tox_env }}
 
     - name: Upload coverage to codecov
