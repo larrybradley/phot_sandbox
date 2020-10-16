@@ -68,7 +68,7 @@ jobs:
     - name: Run tox -e ${{ env.toxenv-full }} (${{ matrix.os }})
       if: "(matrix.os == 'ubuntu-latest' && matrix.python-version == 3.8)"
       env:
-        - TOXPOSARGS="--remote-data=any"
+        TOXPOSARGS="--remote-data=any"
       run: |
         echo "including remote data"
         echo ${{ matrix.tox-env }}
