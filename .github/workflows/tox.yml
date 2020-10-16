@@ -1,8 +1,3 @@
-# GitHub Actions workflow for testing and continuous integration.
-#
-# The tests are run with tox with the test environments configured by
-# tox.ini.
-
 name: CI Tests
 
 on:
@@ -19,33 +14,89 @@ env:
 jobs:
 
   main_matrix:
-    name: ${{ matrix.os }}, ${{ matrix.python-version }}-${{ matrix.tox-env }}
+    name: ${{ matrix.os }}, ${{ matrix.tox_env }}
     runs-on: ${{ matrix.os }}
     if: "!(contains(github.event.head_commit.message, '[skip ci]') || contains(github.event.head_commit.message, '[ci skip]'))"
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.6, 3.7, 3.8]
-        exclude:
-          - os: macos-latest
-            python-version: 3.6
-          - os: macos-latest
-            python-version: 3.7
-          - os: windows-latest
-            python-version: 3.6
-          - os: windows-latest
-            python-version: 3.7
-        tox-env: ['alldeps-cov']
+        name: [
+          'ubuntu-py36'
+          'ubuntu-py37'
+          'ubuntu-py38'
+          'macos-py38'
+          'windows-py38'
+          'ubuntu-py38-test'
+          'ubuntu-py38-test-alldeps-devdeps'
+          'ubuntu-py38-codestyle'
+          'ubuntu-py38-buildocs'
+          'ubuntu-py38-linkcheck'
+          'ubuntu-py38-bandit'
+          'ubuntu-py36-test-alldeps-astropylts-numpy117'
+          'ubuntu-py37-test-alldeps-astropylts-numpy118'
+          ]
+
+      include:
+        -name: 'ubuntu-py36'
+         os: 'ubuntu-latest'
+         python: '3.6'
+         tox_env: 'py36-test-alldeps'
+        -name: 'ubuntu-py37'
+         os: 'ubuntu-latest'
+         python: '3.7'
+         tox_env: 'py37-test-alldeps'
+        -name: 'ubuntu-py38'
+         os: 'ubuntu-latest'
+         python: '3.8'
+         tox_env: 'py38-test-alldeps-cov'
+         use_remote_data: true
+        -name: 'macos-py38'
+         os: 'macos-latest'
+         python: '3.8'
+         tox_env: 'py38-test-alldeps'
+        -name: 'windows-py38'
+         os: 'windows-latest'
+         python: '3.8'
+         tox_env: 'py38-test-alldeps'
+        -name: 'ubuntu-py38-test'
+         os: 'ubuntu-latest'
+         python: '3.8'
+         tox_env: 'py38-test'
+        -name: 'ubuntu-py38-test-alldeps-devdeps'
+         os: 'ubuntu-latest'
+         python: '3.8'
+         tox_env: 'py38-test-test-alldeps-devdeps'
+        -name: 'ubuntu-py38-codestyle'
+         os: 'ubuntu-latest'
+         python: '3.8'
+         tox_env: 'py38-codestyle'
+        -name: 'ubuntu-py38-builddocs'
+         os: 'ubuntu-latest'
+         python: '3.8'
+         tox_env: 'py38-builddocs'
+        -name: 'ubuntu-py38-linkcheck'
+         os: 'ubuntu-latest'
+         python: '3.8'
+         tox_env: 'py38-linkcheck'
+        -name: 'ubuntu-py38-bandit'
+         os: 'ubuntu-latest'
+         python: '3.8'
+         tox_env: 'py38-bandit'
+        -name: 'ubuntu-py36-test-alldeps-astropylts-numpy117'
+         os: 'ubuntu-latest'
+         python: '3.6'
+         tox_env: 'py36-test-alldeps-astropylts-numpy117'
+        -name: 'ubuntu-py37-test-alldeps-astropylts-numpy118'
+         os: 'ubuntu-latest'
+         python: '3.7'
+         tox_env: 'py37-test-alldeps-astropylts-numpy118'
+
     steps:
-    - name: Define tox environment name
-      shell: bash
-      run: echo toxenv-full=$(python -c "print('py'+'${{ matrix.python-version }}'.replace('.', '') + '-${{ matrix.tox-env }}')") >> $GITHUB_ENV
     - name: Check out repository
       uses: actions/checkout@v2
-    - name: Set up Python
+    - name: Set up Python ${{ matrix.python }}
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ matrix.python }}
     - name: Install base dependencies
       run: |
         python -m pip install --upgrade pip
@@ -57,101 +108,21 @@ jobs:
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
 
-    - name: Run tox -e ${{ env.toxenv-full }} (${{ matrix.os }})
-      if: "!(matrix.os == 'ubuntu-latest' && matrix.python-version == 3.8)"
+    - name: Run tests
       run: |
         #echo ${{ matrix.tox-env }}
-        tox -e ${{ matrix.tox-env }}
+        tox -e ${{ matrix.tox_env }}
 
-    - name: Run tox -e ${{ env.toxenv-full }} (${{ matrix.os }}) w/remote data
-      if: "(matrix.os == 'ubuntu-latest' && matrix.python-version == 3.8)"
+    - name: Run tests with remote data
+      if: matrix.use_remote_data
       env:
         TOXPOSARGS: '--remote-data=any'
       run: |
-        #echo "including remote data"
         #echo ${{ matrix.tox-env }}
-        tox -e ${{ matrix.tox-env }}
+        tox -e ${{ matrix.tox_env }}
 
     - name: Upload coverage to codecov
-      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.8
+      if: endsWith(matrix.tox_env, '-cov')
       uses: codecov/codecov-action@v1.0.13
       with:
         file: ./coverage.xml
-
-  tox_matrix:
-    name: ${{ matrix.os }}, ${{ matrix.python-version }}-${{ matrix.env.TOXENV }}
-    runs-on: ${{ matrix.os }}
-    if: "!(contains(github.event.head_commit.message, '[skip ci]') || contains(github.event.head_commit.message, '[ci skip]'))"
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.8]
-        env:
-          - TOXENV: test
-          - TOXENV: test-alldeps-devdeps
-          - TOXENV: codestyle
-          - TOXENV: build_docs
-          - TOXENV: linkcheck
-          - TOXENV: bandit
-    steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install base dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install tox
-    - name: Install graphviz dependency
-      if: contains(matrix.env.TOXENV, 'build_docs')
-      run: |
-        sudo apt-get -y install graphviz
-    - name: Print Python, pip, setuptools, and tox versions
-      run: |
-        python -c "import sys; print(f'Python {sys.version}')"
-        python -c "import pip; print(f'pip {pip.__version__}')"
-        python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
-        python -c "import tox; print(f'tox {tox.__version__}')"
-    - name: Run tox -e ${{ matrix.env.TOXENV }} (${{ matrix.os }})
-      run: |
-        #echo ${{ matrix.env.TOXENV }}
-        tox -e ${{ matrix.env.TOXENV }}
-
-  astropy_lts:
-    name: ${{ matrix.os }}, ${{ matrix.python-version }}-${{ matrix.tox-env }}
-    runs-on: ${{ matrix.os }}
-    if: "!(contains(github.event.head_commit.message, '[skip ci]') || contains(github.event.head_commit.message, '[ci skip]'))"
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.6, 3.7]
-        tox-env: ['test-alldeps-astropylts-numpy117',
-                  'test-alldeps-astropylts-numpy118']
-        exclude:
-          - python-version: 3.6
-            tox-env: 'test-alldeps-astropylts-numpy118'
-          - python-version: 3.7
-            tox-env: 'test-alldeps-astropylts-numpy117'
-    steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install base dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install tox
-    - name: Print Python, pip, setuptools, and tox versions
-      run: |
-        python -c "import sys; print(f'Python {sys.version}')"
-        python -c "import pip; print(f'pip {pip.__version__}')"
-        python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
-        python -c "import tox; print(f'tox {tox.__version__}')"
-    - name: Run tox -e ${{ matrix.tox-env }} (${{ matrix.os }})
-      run: |
-        #echo ${{ matrix.tox-env }}
-        tox -e ${{ matrix.tox-env }}
