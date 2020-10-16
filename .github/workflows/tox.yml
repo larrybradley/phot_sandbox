@@ -13,8 +13,8 @@ env:
 
 jobs:
 
-  main_matrix:
-    name: ${{ matrix.os }}, ${{ matrix.tox_env }}
+  ci-tests:
+    #name: ${{ matrix.os }}, ${{ matrix.tox_env }}
     runs-on: ${{ matrix.os }}
     if: "!(contains(github.event.head_commit.message, '[skip ci]') || contains(github.event.head_commit.message, '[ci skip]'))"
     strategy:
