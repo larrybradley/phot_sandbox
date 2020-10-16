@@ -60,8 +60,6 @@ jobs:
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
 
-    if: "!(contains(github.event.head_commit.message, '[skip ci]') || contains(github.event.head_commit.message, '[ci skip]'))"
-
     if: "!(${{ matrix.os }} == 'ubuntu-latest' && ${{ matrix.python-version }} == 3.8)"
     - name: Run tox -e ${{ env.toxenv-full }} (${{ matrix.os }})
       run: |
