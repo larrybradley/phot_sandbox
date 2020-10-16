@@ -20,20 +20,20 @@ jobs:
     strategy:
       matrix:
         name: [
-          'ubuntu-py36'
-          'ubuntu-py37'
-          'ubuntu-py38'
-          'macos-py38'
-          'windows-py38'
-          'ubuntu-py38-test'
-          'ubuntu-py38-test-alldeps-devdeps'
-          'ubuntu-py38-codestyle'
-          'ubuntu-py38-buildocs'
-          'ubuntu-py38-linkcheck'
-          'ubuntu-py38-bandit'
-          'ubuntu-py36-test-alldeps-astropylts-numpy117'
-          'ubuntu-py37-test-alldeps-astropylts-numpy118'
-          ]
+          'ubuntu-py36',
+          'ubuntu-py37',
+          'ubuntu-py38',
+          'macos-py38',
+          'windows-py38',
+          'ubuntu-py38-test',
+          'ubuntu-py38-test-alldeps-devdeps',
+          'ubuntu-py38-codestyle',
+          'ubuntu-py38-buildocs',
+          'ubuntu-py38-linkcheck',
+          'ubuntu-py38-bandit',
+          'ubuntu-py36-test-alldeps-astropylts-numpy117',
+          'ubuntu-py37-test-alldeps-astropylts-numpy118',
+        ]
 
       include:
         -name: 'ubuntu-py36'
