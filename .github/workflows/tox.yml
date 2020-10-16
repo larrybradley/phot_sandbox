@@ -60,14 +60,14 @@ jobs:
         python -c "import setuptools; print(f'setuptools {setuptools.__version__}')"
         python -c "import tox; print(f'tox {tox.__version__}')"
 
-    #if: "!(${{ matrix.os }} == 'ubuntu-latest' && ${{ matrix.python-version }} == 3.8)"
-    #- name: Run tox -e ${{ env.toxenv-full }} (${{ matrix.os }})
-    #  run: |
-    #    echo ${{ matrix.tox-env }}
-    #    #tox -e ${{ matrix.tox-env }}
-
-    if: "(matrix.os == 'ubuntu-latest' && matrix.python-version == 3.8)"
     - name: Run tox -e ${{ env.toxenv-full }} (${{ matrix.os }})
+      if: "!(matrix.os == 'ubuntu-latest' && matrix.python-version == 3.8)"
+      run: |
+        echo ${{ matrix.tox-env }}
+        #tox -e ${{ matrix.tox-env }}
+
+    - name: Run tox -e ${{ env.toxenv-full }} (${{ matrix.os }})
+      if: "(matrix.os == 'ubuntu-latest' && matrix.python-version == 3.8)"
       env:
         - TOXPOSARGS="--remote-data=any"
       run: |
